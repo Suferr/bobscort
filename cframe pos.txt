@@ -1,0 +1,50 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "CFrameDisplay"
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+local textLabel = Instance.new("TextLabel")
+textLabel.Size = UDim2.new(0.3, 0, 0.1, 0)
+textLabel.Position = UDim2.new(0.35, 0, 0.05, 0)
+textLabel.BackgroundColor3 = Color3.new(0, 0, 0)
+textLabel.TextColor3 = Color3.new(1, 1, 1)
+textLabel.TextScaled = true
+textLabel.Text = "CFrame Position: Loading..."
+textLabel.Parent = screenGui
+
+local copyButton = Instance.new("TextButton")
+copyButton.Size = UDim2.new(0.3, 0, 0.05, 0)
+copyButton.Position = UDim2.new(0.35, 0, 0.16, 0)
+copyButton.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
+copyButton.TextColor3 = Color3.new(1, 1, 1)
+copyButton.TextScaled = true
+copyButton.Text = "Copy"
+copyButton.Parent = screenGui
+
+local function formatNumber(num)
+    return math.floor(num + 0.5)
+end
+
+local function updateCFrameLabel()
+    local cframePosition = humanoidRootPart.CFrame.Position
+    local formattedX = formatNumber(cframePosition.X)
+    local formattedY = formatNumber(cframePosition.Y)
+    local formattedZ = formatNumber(cframePosition.Z)
+    textLabel.Text = "CFrame Position:\nX: " .. formattedX .. ", Y: " .. formattedY .. ", Z: " .. formattedZ
+end
+
+local function copyPositionToClipboard()
+    local cframePosition = humanoidRootPart.CFrame.Position
+    local formattedX = formatNumber(cframePosition.X)
+    local formattedY = formatNumber(cframePosition.Y)
+    local formattedZ = formatNumber(cframePosition.Z)
+    local cframeString = "game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(" 
+                         .. formattedX .. ", " .. formattedY .. ", " .. formattedZ .. ")"
+    setclipboard(cframeString)
+end
+
+copyButton.MouseButton1Click:Connect(copyPositionToClipboard)
+game:GetService("RunService").RenderStepped:Connect(updateCFrameLabel)
