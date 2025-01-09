@@ -40,12 +40,40 @@ function UILibrary:CreateLabel(parent, text, size, position)
 end
 
 function UILibrary:CreateFrame(parent, size, position, color)
-    return self:Create("Frame", {
+    local frame = self:Create("Frame", {
         Parent = parent,
         Size = size,
         Position = position,
         BackgroundColor3 = color or Color3.fromRGB(50, 50, 50)
     })
+    
+    -- Make the frame draggable
+    local dragging = false
+    local dragInput, startPos, startSize
+
+    frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            startPos = input.Position
+            startSize = frame.Position
+            input.Consumed = true
+        end
+    end)
+
+    frame.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local delta = input.Position - startPos
+            frame.Position = UDim2.new(startSize.X.Scale, startSize.X.Offset + delta.X, startSize.Y.Scale, startSize.Y.Offset + delta.Y)
+        end
+    end)
+
+    frame.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+        end
+    end)
+
+    return frame
 end
 
 function UILibrary:CreateInput(parent, placeholder, size, position)
