@@ -1,0 +1,94 @@
+local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/7yhx/kwargs_Ui_Library/main/source.lua"))()
+
+local UI = Lib:Create{
+   Theme = "Dark",
+   Size = UDim2.new(0, 600, 0, 450)
+}
+
+local Main = UI:Tab{
+   Name = "Teleport"
+}
+
+local Divider = Main:Divider{
+   Name = "Teleport Locations"
+}
+
+Divider:Button{
+   Name = "Tsunami Game",
+   Callback = function()
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-23, 122, 980)
+   end
+}
+
+Divider:Button{
+   Name = "Storage Vault",
+   Callback = function()
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-174, 121, 476)
+   end
+}
+
+Divider:Button{
+   Name = "Chrome Banana",
+   Callback = function()
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-173, 121, -23)
+   end
+}
+
+Divider:Button{
+   Name = "Exit",
+   Callback = function()
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-179, 121, -546)
+   end
+}
+
+Divider:Button{
+   Name = "Bob Robert",
+   Callback = function()
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(158, 121, -544)
+   end
+}
+
+Divider:Button{
+   Name = "Alien Dude",
+   Callback = function()
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1176, 230, -1100)
+   end
+}
+
+Divider:Toggle{
+   Name = "End Teleport",
+   Callback = function(State)
+       if State then
+           game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-14, 40, -1011)
+       end
+   end
+}
+
+Divider:Toggle{
+   Name = "Noclip",
+   Callback = function(State)
+       local Noclip, Clip
+
+       if State then
+           function noclip()
+               Clip = false
+               Noclip = game:GetService("RunService").Stepped:Connect(function()
+                   if Clip == false and game.Players.LocalPlayer.Character then
+                       for _, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                           if v:IsA("BasePart") and v.CanCollide then
+                               v.CanCollide = false
+                           end
+                       end
+                   end
+               end)
+           end
+
+           noclip()
+       else
+           if Noclip then
+               Noclip:Disconnect()
+               Clip = true
+           end
+       end
+   end
+}
