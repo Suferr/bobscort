@@ -1,0 +1,107 @@
+local UILibrary = {}
+
+function UILibrary:Create(instanceType, properties)
+    local instance = Instance.new(instanceType)
+    
+    for property, value in pairs(properties) do
+        instance[property] = value
+    end
+    
+    return instance
+end
+
+function UILibrary:CreateButton(parent, text, size, position, onClick)
+    local button = self:Create("TextButton", {
+        Parent = parent,
+        Text = text,
+        Size = size,
+        Position = position,
+        BackgroundColor3 = Color3.fromRGB(50, 50, 50),
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        Font = Enum.Font.SourceSans,
+        TextSize = 20
+    })
+    
+    button.MouseButton1Click:Connect(onClick)
+    return button
+end
+
+function UILibrary:CreateLabel(parent, text, size, position)
+    return self:Create("TextLabel", {
+        Parent = parent,
+        Text = text,
+        Size = size,
+        Position = position,
+        BackgroundTransparency = 1,
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        Font = Enum.Font.SourceSans,
+        TextSize = 20
+    })
+end
+
+function UILibrary:CreateFrame(parent, size, position, color)
+    return self:Create("Frame", {
+        Parent = parent,
+        Size = size,
+        Position = position,
+        BackgroundColor3 = color or Color3.fromRGB(50, 50, 50)
+    })
+end
+
+function UILibrary:CreateInput(parent, placeholder, size, position)
+    return self:Create("TextBox", {
+        Parent = parent,
+        PlaceholderText = placeholder,
+        Size = size,
+        Position = position,
+        BackgroundColor3 = Color3.fromRGB(50, 50, 50),
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        Font = Enum.Font.SourceSans,
+        TextSize = 20
+    })
+end
+
+function UILibrary:CreateSlider(parent, size, position, min, max, callback)
+    local sliderFrame = self:Create("Frame", {
+        Parent = parent,
+        Size = size,
+        Position = position,
+        BackgroundColor3 = Color3.fromRGB(50, 50, 50),
+        ClipsDescendants = true
+    })
+
+    local sliderBar = self:Create("Frame", {
+        Parent = sliderFrame,
+        Size = UDim2.new(1, 0, 0.5, 0),
+        Position = UDim2.new(0, 0, 0.25, 0),
+        BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+    })
+
+    local sliderKnob = self:Create("ImageButton", {
+        Parent = sliderFrame,
+        Size = UDim2.new(0, 20, 1, 0),
+        Position = UDim2.new(0, 0, 0, 0),
+        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+        BorderSizePixel = 0
+    })
+
+    sliderKnob.Draggable = true
+
+    sliderKnob.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            local sliderAbsolutePosition = sliderFrame.AbsolutePosition.X
+            local sliderWidth = sliderFrame.AbsoluteSize.X
+            local mouseX = math.clamp(input.Position.X, sliderAbsolutePosition, sliderAbsolutePosition + sliderWidth)
+            local percentage = (mouseX - sliderAbsolutePosition) / sliderWidth
+
+            sliderKnob.Position = UDim2.new(percentage, -10, 0, 0)
+
+            local value = math.floor(min + (percentage * (max - min)))
+            callback(value)
+        end
+    end)
+
+    return sliderFrame
+end
+
+return UILibrary
