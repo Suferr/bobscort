@@ -1,0 +1,34 @@
+-- Services
+local rs = game:GetService('ReplicatedStorage')
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
+local mi = rs.GameRemotes.MoveItem
+local si = rs.GameRemotes.SortItem
+
+local ScreenGui = Instance.new("ScreenGui", lp.PlayerGui)
+ScreenGui.Name = "DupeChestGui"
+
+local Frame = Instance.new("Frame", ScreenGui)
+Frame.Size = UDim2.new(0, 200, 0, 100)
+Frame.Position = UDim2.new(0.5, -100, 0.5, -50)
+Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+
+local DupeButton = Instance.new("TextButton", Frame)
+DupeButton.Size = UDim2.new(1, 0, 1, 0)
+DupeButton.Text = "Dupe Chest"
+DupeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+DupeButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+DupeButton.Font = Enum.Font.SourceSansBold
+DupeButton.TextSize = 18
+
+local function dupeChest()
+    for i = 36, 62 do
+        mi:InvokeServer(i, -1) -- Loot items from the chest
+        spawn(function()
+            si:InvokeServer(i) -- Duplicate the items
+        end)
+    end
+end
+
+-- Connect Button Click
+DupeButton.MouseButton1Click:Connect(dupeChest)
