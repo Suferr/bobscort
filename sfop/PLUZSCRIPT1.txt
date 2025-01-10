@@ -1,0 +1,7 @@
+wait(1)
+Nuke = script.Parent
+
+for i = 1, 10000000 do
+Nuke.Size = Nuke.Size + Vector3.new(.01,.01,.01)
+wait(10)
+end
