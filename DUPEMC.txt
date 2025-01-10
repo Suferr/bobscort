@@ -5,14 +5,17 @@ local lp = Players.LocalPlayer
 local mi = rs.GameRemotes.MoveItem
 local si = rs.GameRemotes.SortItem
 
+-- Create Screen GUI
 local ScreenGui = Instance.new("ScreenGui", lp.PlayerGui)
 ScreenGui.Name = "DupeChestGui"
 
+-- Create Frame
 local Frame = Instance.new("Frame", ScreenGui)
-Frame.Size = UDim2.new(0, 200, 0, 100)
-Frame.Position = UDim2.new(0.5, -100, 0.5, -50)
+Frame.Size = UDim2.new(0, 200, 0, 50) -- Adjust for button size
+Frame.Position = UDim2.new(1, -210, 0.5, -25) -- Middle right, slightly offset for aesthetics
 Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 
+-- Create Button
 local DupeButton = Instance.new("TextButton", Frame)
 DupeButton.Size = UDim2.new(1, 0, 1, 0)
 DupeButton.Text = "Dupe Chest"
@@ -21,6 +24,7 @@ DupeButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 DupeButton.Font = Enum.Font.SourceSansBold
 DupeButton.TextSize = 18
 
+-- Dupe Function
 local function dupeChest()
     for i = 36, 62 do
         mi:InvokeServer(i, -1) -- Loot items from the chest
