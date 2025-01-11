@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bobscort Library Docs</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.13.1/ace.js"></script>
     <style>
         body {
             font-family: 'Open Sans', sans-serif;
@@ -12,26 +13,47 @@
         h2 {
             text-align: center;
         }
+        .editor {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <p>&nbsp;</p>
     <h2>Bobscort Library Docs</h2>
     <p>1. Set up the library</p>
-    <pre><code class="language-plaintext">loadstring(game:HttpGet("https://bobscort.vercel.app/bobscortlibrary.lua",true))()</code></pre>
+    <div id="editor1" class="editor">loadstring(game:HttpGet("https://bobscort.vercel.app/bobscortlibrary.lua",true))()</div>
     <p>2. Creating a window/frame</p>
-    <pre><code class="language-plaintext">local Frame1 = _G.Main:New("Test")</code></pre>
+    <div id="editor2" class="editor">local Frame1 = _G.Main:New("Test")</div>
     <p>3. Creating a Button</p>
-    <pre><code class="language-plaintext">Frame1:Button("Text Button 1", function()
-    print("Hello World!")
-end)</code></pre>
+    <div id="editor3" class="editor">Frame1:Button("Text Button 1", function()\n    print("Hello World!")\nend)</div>
     <p>4. Creating a Toggle</p>
-    <pre><code class="language-plaintext">Frame1:Toggle("Toggle Button", false, function(state)
-    print("Toggled State: " .. (state and "On" or "Off"))
-end)</code></pre>
+    <div id="editor4" class="editor">Frame1:Toggle("Toggle Button", false, function(state)\n    print("Toggled State: " .. (state and "On" or "Off"))\nend)</div>
     <p>5. Creating a Slider</p>
-    <pre><code class="language-plaintext">Frame1:Slider("Slider", 0, 100, 50, function(value)
-    print("Slider Value: " ..value)
-end)</code></pre>
+    <div id="editor5" class="editor">Frame1:Slider("Slider", 0, 100, 50, function(value)\n    print("Slider Value: " ..value)\nend)</div>
+    
+    <script>
+        // Function to initialize Ace Editor in read-only mode
+        function setupEditor(editorId, language) {
+            const editor = ace.edit(editorId);
+            editor.setTheme("ace/theme/github");
+            editor.session.setMode("ace/mode/" + language);
+            editor.setReadOnly(true); // Makes the editor read-only
+            editor.renderer.setShowGutter(false); // Hides line numbers if not needed
+            editor.setOptions({
+                highlightActiveLine: false,
+                showPrintMargin: false
+            });
+        }
+
+        // Initialize all editors
+        setupEditor("editor1", "lua");
+        setupEditor("editor2", "lua");
+        setupEditor("editor3", "lua");
+        setupEditor("editor4", "lua");
+        setupEditor("editor5", "lua");
+    </script>
 </body>
 </html>
