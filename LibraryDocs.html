@@ -13,32 +13,70 @@
         h2 {
             text-align: center;
         }
+        .editor-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
         .editor {
             width: 100%;
             height: 150px;
-            margin-bottom: 20px;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .copy-btn:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <p>&nbsp;</p>
     <h2>Bobscort Library Docs</h2>
+
     <p>1. Set up the library</p>
-    <div id="editor1" class="editor">loadstring(game:HttpGet("https://bobscort.vercel.app/bobscortlibrary.lua",true))()</div>
+    <div class="editor-container">
+        <button class="copy-btn" onclick="copyCode('editor1')">Copy</button>
+        <div id="editor1" class="editor">loadstring(game:HttpGet("https://bobscort.vercel.app/bobscortlibrary.lua",true))()</div>
+    </div>
+
     <p>2. Creating a window/frame</p>
-    <div id="editor2" class="editor">local Frame1 = _G.Main:New("Test")</div>
+    <div class="editor-container">
+        <button class="copy-btn" onclick="copyCode('editor2')">Copy</button>
+        <div id="editor2" class="editor">local Frame1 = _G.Main:New("Test")</div>
+    </div>
+
     <p>3. Creating a Button</p>
-    <div id="editor3" class="editor">Frame1:Button("Text Button 1", function()\n    print("Hello World!")\nend)</div>
+    <div class="editor-container">
+        <button class="copy-btn" onclick="copyCode('editor3')">Copy</button>
+        <div id="editor3" class="editor">Frame1:Button("Text Button 1", function()\n    print("Hello World!")\nend)</div>
+    </div>
+
     <p>4. Creating a Toggle</p>
-    <div id="editor4" class="editor">Frame1:Toggle("Toggle Button", false, function(state)\n    print("Toggled State: " .. (state and "On" or "Off"))\nend)</div>
+    <div class="editor-container">
+        <button class="copy-btn" onclick="copyCode('editor4')">Copy</button>
+        <div id="editor4" class="editor">Frame1:Toggle("Toggle Button", false, function(state)\n    print("Toggled State: " .. (state and "On" or "Off"))\nend)</div>
+    </div>
+
     <p>5. Creating a Slider</p>
-    <div id="editor5" class="editor">Frame1:Slider("Slider", 0, 100, 50, function(value)\n    print("Slider Value: " ..value)\nend)</div>
-    
+    <div class="editor-container">
+        <button class="copy-btn" onclick="copyCode('editor5')">Copy</button>
+        <div id="editor5" class="editor">Frame1:Slider("Slider", 0, 100, 50, function(value)\n    print("Slider Value: " ..value)\nend)</div>
+    </div>
+
     <script>
         // Function to initialize Ace Editor in read-only mode
         function setupEditor(editorId, language) {
             const editor = ace.edit(editorId);
-            editor.setTheme("ace/theme/github");
+            editor.setTheme("ace/theme/monokai"); // Use Monokai theme
             editor.session.setMode("ace/mode/" + language);
             editor.setReadOnly(true); // Makes the editor read-only
             editor.renderer.setShowGutter(false); // Hides line numbers if not needed
@@ -54,6 +92,17 @@
         setupEditor("editor3", "lua");
         setupEditor("editor4", "lua");
         setupEditor("editor5", "lua");
+
+        // Copy code function
+        function copyCode(editorId) {
+            const editor = ace.edit(editorId);
+            const code = editor.getValue();
+            navigator.clipboard.writeText(code).then(() => {
+                alert("Code copied to clipboard!");
+            }).catch(err => {
+                console.error("Failed to copy code: ", err);
+            });
+        }
     </script>
 </body>
 </html>
