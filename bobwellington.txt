@@ -1,0 +1,104 @@
+local UILibrary = {}
+
+function UILibrary:CreateWindow(title)
+    local ScreenGui = Instance.new("ScreenGui")
+    local Frame = Instance.new("Frame")
+    local Title = Instance.new("TextLabel")
+
+    ScreenGui.Name = title
+    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+    Frame.Parent = ScreenGui
+    Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Frame.Position = UDim2.new(0.5, -150, 0.5, -200)
+    Frame.Size = UDim2.new(0, 300, 0, 400)
+
+    Title.Parent = Frame
+    Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Title.Size = UDim2.new(1, 0, 0, 50)
+    Title.Font = Enum.Font.SourceSans
+    Title.Text = title
+    Title.TextColor3 = Color3.fromRGB(0, 0, 0)
+    Title.TextSize = 24
+
+    return Frame
+end
+
+function UILibrary:CreateTab(frame, tabName)
+    local TabButton = Instance.new("TextButton")
+    TabButton.Parent = frame
+    TabButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    TabButton.Size = UDim2.new(0, 100, 0, 50)
+    TabButton.Font = Enum.Font.SourceSans
+    TabButton.Text = tabName
+    TabButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+    TabButton.TextSize = 24
+
+    return TabButton
+end
+
+function UILibrary:CreateButton(frame, buttonText, callback)
+    local Button = Instance.new("TextButton")
+    Button.Parent = frame
+    Button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Button.Size = UDim2.new(0, 100, 0, 50)
+    Button.Position = UDim2.new(0.5, -50, 0.5, -25)
+    Button.Font = Enum.Font.SourceSans
+    Button.Text = buttonText
+    Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+    Button.TextSize = 24
+
+    Button.MouseButton1Click:Connect(callback)
+
+    return Button
+end
+
+function UILibrary:CreateSlider(frame, min, max, callback)
+    local Slider = Instance.new("Frame")
+    local SliderBar = Instance.new("Frame")
+    local SliderButton = Instance.new("TextButton")
+
+    Slider.Parent = frame
+    Slider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Slider.Size = UDim2.new(0, 200, 0, 50)
+    Slider.Position = UDim2.new(0.5, -100, 0.5, -25)
+
+    SliderBar.Parent = Slider
+    SliderBar.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+    SliderBar.Size = UDim2.new(1, 0, 0, 10)
+    SliderBar.Position = UDim2.new(0, 0, 0.5, -5)
+
+    SliderButton.Parent = SliderBar
+    SliderButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    SliderButton.Size = UDim2.new(0, 20, 0, 20)
+    SliderButton.Position = UDim2.new(0, 0, -0.5, -5)
+    SliderButton.Font = Enum.Font.SourceSans
+    SliderButton.Text = ""
+    SliderButton.TextSize = 14
+
+    local function updateSlider(input)
+        local pos = UDim2.new(math.clamp((input.Position.X - SliderBar.AbsolutePosition.X) / SliderBar.AbsoluteSize.X, 0, 1), 0, -0.5, -5)
+        SliderButton.Position = pos
+        local value = math.floor(min + (max - min) * pos.X.Scale)
+        callback(value)
+    end
+
+    SliderButton.MouseButton1Down:Connect(function()
+        updateSlider(game:GetService("UserInputService"):GetMouseLocation())
+        local moveConnection
+        moveConnection = game:GetService("UserInputService").InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement then
+                updateSlider(input)
+            end
+        end)
+        game:GetService("UserInputService").InputEnded:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                moveConnection:Disconnect()
+            end
+        end)
+    end)
+
+    return Slider
+end
+
+return UILibrary
