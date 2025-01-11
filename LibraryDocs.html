@@ -66,19 +66,19 @@
     <p>3. Creating a Button</p>
     <div class="editor-container">
         <button class="copy-btn" onclick="copyCode('editor3')">Copy</button>
-        <div id="editor3" class="editor">Frame1:Button("Text Button 1", function()\n    print("Hello World!")\nend)</div>
+        <div id="editor3" class="editor">Frame1:Button("Text Button 1", function()\n    print("Hello World!")\n)</div>
     </div>
 
     <p>4. Creating a Toggle</p>
     <div class="editor-container">
         <button class="copy-btn" onclick="copyCode('editor4')">Copy</button>
-        <div id="editor4" class="editor">Frame1:Toggle("Toggle Button", false, function(state)\n    print("Toggled State: " .. (state and "On" or "Off"))\nend)</div>
+        <div id="editor4" class="editor">Frame1:Toggle("Toggle Button", false, function(state)\n    print("Toggled State: " .. (state and "On" or "Off"))\n)</div>
     </div>
 
     <p>5. Creating a Slider</p>
     <div class="editor-container">
         <button class="copy-btn" onclick="copyCode('editor5')">Copy</button>
-        <div id="editor5" class="editor">Frame1:Slider("Slider", 0, 100, 50, function(value)\n    print("Slider Value: " .. value)\nend)</div>
+        <div id="editor5" class="editor">Frame1:Slider("Slider", 0, 100, 50, function(value)\n    print("Slider Value: " .. value)\n)</div>
     </div>
 
     <script>
