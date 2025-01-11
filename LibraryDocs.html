@@ -1,18 +1,37 @@
-<p>&nbsp;</p>
-<h2 style="text-align:center;">Bobscort Library Docs</h2>
-<p>1. Set up the library</p>
-<pre><code class="language-plaintext">loadstring(game:HttpGet("https://bobscort.vercel.app/bobscortlibrary.lua",true))()</code></pre>
-<p>2. Creating a window/frame</p>
-<pre><code class="language-plaintext">local Frame1 = _G.Main:New("Test")</code></pre>
-<p>3. Creating a Button</p>
-<pre><code class="language-plaintext">Frame1:Button("Text Button 1", function()
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bobscort Library Docs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+        h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <p>&nbsp;</p>
+    <h2>Bobscort Library Docs</h2>
+    <p>1. Set up the library</p>
+    <pre><code class="language-plaintext">loadstring(game:HttpGet("https://bobscort.vercel.app/bobscortlibrary.lua",true))()</code></pre>
+    <p>2. Creating a window/frame</p>
+    <pre><code class="language-plaintext">local Frame1 = _G.Main:New("Test")</code></pre>
+    <p>3. Creating a Button</p>
+    <pre><code class="language-plaintext">Frame1:Button("Text Button 1", function()
     print("Hello World!")
-end    </code></pre>
-<p>4. Creating a Toggle</p>
-<pre><code class="language-plaintext">Frame1:Toggle("Toggle Button", false, function(state)
+end)</code></pre>
+    <p>4. Creating a Toggle</p>
+    <pre><code class="language-plaintext">Frame1:Toggle("Toggle Button", false, function(state)
     print("Toggled State: " .. (state and "On" or "Off"))
 end)</code></pre>
-<p>5. Creating a Slider</p>
-<pre><code class="language-plaintext">Frame1:Slider("Slider", 0, 100, 50, function(value)
+    <p>5. Creating a Slider</p>
+    <pre><code class="language-plaintext">Frame1:Slider("Slider", 0, 100, 50, function(value)
     print("Slider Value: " ..value)
-end)    </code></pre>
+end)</code></pre>
+</body>
+</html>
