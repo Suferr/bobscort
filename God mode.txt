@@ -1,0 +1,59 @@
+-- Create GUI Button
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui") -- Ensure PlayerGui is available
+
+-- Create ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.ResetOnSpawn = false -- Prevent GUI from resetting on respawn
+screenGui.Parent = playerGui
+
+-- Create Button
+local button = Instance.new("TextButton")
+button.Size = UDim2.new(0, 200, 0, 50) -- Size of the button
+button.Position = UDim2.new(1, -210, 0, 10) -- Top-right corner
+button.Text = "Activate God Mode"
+button.BackgroundColor3 = Color3.fromRGB(0, 170, 0) -- Green
+button.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+button.Font = Enum.Font.SourceSans
+button.TextScaled = true
+button.Parent = screenGui -- Parent the button to the ScreenGui
+
+-- Variable to track god mode status
+local godModeActive = false
+
+-- Function to toggle god mode
+local function toggleGodMode()
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+    if humanoid then
+        if godModeActive then
+            -- Deactivate God Mode
+            humanoid.MaxHealth = 100
+            humanoid.Health = humanoid.MaxHealth
+            humanoid:SetAttribute("GodMode", false) -- Disable custom GodMode attribute
+
+            button.Text = "Activate God Mode"
+            button.BackgroundColor3 = Color3.fromRGB(0, 170, 0) -- Green
+        else
+            -- Activate God Mode
+            humanoid.MaxHealth = math.huge
+            humanoid.Health = humanoid.MaxHealth
+            humanoid:SetAttribute("GodMode", true) -- Set custom GodMode attribute
+
+            button.Text = "Deactivate God Mode"
+            button.BackgroundColor3 = Color3.fromRGB(170, 0, 0) -- Red
+
+            -- Prevent any damage
+            humanoid:GetPropertyChangedSignal("Health"):Connect(function()
+                if humanoid:GetAttribute("GodMode") then
+                    humanoid.Health = humanoid.MaxHealth
+                end
+            end)
+        end
+        godModeActive = not godModeActive
+    end
+end
+
+-- Connect button click
+button.MouseButton1Click:Connect(toggleGodMode)
