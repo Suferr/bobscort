@@ -8,7 +8,7 @@ local startPos
 -- Create GUI Elements
 local ScreenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 ScreenGui.Name = "AntiAFKGui"
-ScreenGui.ResetOnSpawn = false -- Prevent resetting on respawn
+ScreenGui.ResetOnSpawn = true -- Resetting on respawn
 
 local Frame = Instance.new("Frame", ScreenGui)
 local TextLabel = Instance.new("TextLabel", Frame)
