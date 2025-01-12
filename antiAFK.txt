@@ -1,0 +1,93 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local toggle = false
+local dragging = false
+local dragStart
+local startPos
+
+-- Create GUI Elements
+local ScreenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+ScreenGui.Name = "AntiAFKGui"
+ScreenGui.ResetOnSpawn = false -- Prevent resetting on respawn
+
+local Frame = Instance.new("Frame", ScreenGui)
+local TextLabel = Instance.new("TextLabel", Frame)
+local ToggleButton = Instance.new("TextButton", Frame)
+
+-- Configure Frame
+Frame.Size = UDim2.new(0, 300, 0, 150)
+Frame.Position = UDim2.new(0.5, -150, 0.5, -75)
+Frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+Frame.BorderSizePixel = 0
+Frame.Active = true -- Makes the frame capable of receiving input
+
+-- Configure Text Label
+TextLabel.Size = UDim2.new(1, 0, 0, 30)
+TextLabel.Position = UDim2.new(0, 0, 0, 0)
+TextLabel.Text = "Simple Anti-AFK Script"
+TextLabel.Font = Enum.Font.SourceSans
+TextLabel.TextSize = 20
+TextLabel.TextColor3 = Color3.new(1, 1, 1)
+TextLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+TextLabel.BorderSizePixel = 0
+
+-- Configure Button
+ToggleButton.Size = UDim2.new(0.8, 0, 0.3, 0)
+ToggleButton.Position = UDim2.new(0.1, 0, 0.5, 0)
+ToggleButton.Text = "Enable Anti-AFK"
+ToggleButton.Font = Enum.Font.SourceSans
+ToggleButton.TextSize = 18
+ToggleButton.TextColor3 = Color3.new(1, 1, 1)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 170, 127)
+ToggleButton.BorderSizePixel = 0
+
+-- Dragging Logic
+Frame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = true
+		dragStart = input.Position
+		startPos = Frame.Position
+	end
+end)
+
+Frame.InputChanged:Connect(function(input)
+	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+		local delta = input.Position - dragStart
+		Frame.Position = UDim2.new(
+			startPos.X.Scale,
+			startPos.X.Offset + delta.X,
+			startPos.Y.Scale,
+			startPos.Y.Offset + delta.Y
+		)
+	end
+end)
+
+Frame.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = false
+	end
+end)
+
+-- Anti-AFK Logic
+local function toggleAntiAFK()
+	toggle = not toggle
+	if toggle then
+		ToggleButton.Text = "Disable Anti-AFK"
+		ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+		print("Anti-AFK enabled")
+		while toggle do
+			wait(60) -- Prevent AFK every 60 seconds
+			local virtualInputManager = game:GetService("VirtualInputManager")
+			virtualInputManager:SendKeyEvent(true, "W", false, game)
+			wait(0.1)
+			virtualInputManager:SendKeyEvent(false, "W", false, game)
+		end
+	else
+		ToggleButton.Text = "Enable Anti-AFK"
+		ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 170, 127)
+		print("Anti-AFK disabled")
+	end
+end
+
+-- Connect the button to toggle the script
+ToggleButton.MouseButton1Click:Connect(toggleAntiAFK)
