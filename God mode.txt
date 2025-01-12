@@ -10,7 +10,7 @@ screenGui.Parent = playerGui
 -- Create Button
 local button = Instance.new("TextButton")
 button.Size = UDim2.new(0, 200, 0, 50) -- Size of the button
-button.Position = UDim2.new(1, -210, 0, 10) -- Top-right corner
+button.Position = UDim2.new(0, 10, 0, 10) -- Top-left corner (10px margin)
 button.Text = "Activate God Mode"
 button.BackgroundColor3 = Color3.fromRGB(0, 170, 0) -- Green
 button.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
