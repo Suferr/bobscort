@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customizable Counter</title>
+  <title>Auto Increment Counter</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,47 +14,45 @@
       font-size: 48px;
       margin: 20px;
     }
-    input[type="text"], input[type="number"] {
+    input[type="number"] {
       margin: 10px;
       padding: 5px;
     }
   </style>
 </head>
 <body>
-  <h1>Customizable Counter</h1>
+  <h1>Auto Increment Counter</h1>
   <div>
-    <label for="fontInput">Font Family: </label>
-    <input type="text" id="fontInput" placeholder="e.g., 'Courier New', sans-serif">
-    <label for="addNumber">Add Number: </label>
-    <input type="number" id="addNumber" value="1">
-    <button onclick="applyCustomization()">Apply</button>
+    <label for="endNumber">End Number: </label>
+    <input type="number" id="endNumber" placeholder="Enter end number" value="10">
+    <button onclick="startCounter()">Start</button>
   </div>
   <div id="counter">0</div>
-  <button onclick="increment()">+</button>
-  <button onclick="reset()">Reset</button>
 
   <script>
     let counterValue = 0;
+    let interval;
 
-    function applyCustomization() {
-      const fontInput = document.getElementById('fontInput').value;
+    function startCounter() {
+      const endNumber = parseInt(document.getElementById('endNumber').value, 10);
 
-      if (fontInput) {
-        document.getElementById('counter').style.fontFamily = fontInput;
+      if (isNaN(endNumber) || endNumber <= 0) {
+        alert("Please enter a valid positive number.");
+        return;
       }
-    }
 
-    function increment() {
-      const addNumber = parseInt(document.getElementById('addNumber').value, 10);
-      if (!isNaN(addNumber)) {
-        counterValue += addNumber;
-        document.getElementById('counter').textContent = counterValue;
-      }
-    }
-
-    function reset() {
+      clearInterval(interval); // Clear any existing counter
       counterValue = 0;
       document.getElementById('counter').textContent = counterValue;
+
+      interval = setInterval(() => {
+        if (counterValue < endNumber) {
+          counterValue++;
+          document.getElementById('counter').textContent = counterValue;
+        } else {
+          clearInterval(interval); // Stop the counter when reaching the end number
+        }
+      }, 1000); // Update every second
     }
   </script>
 </body>
