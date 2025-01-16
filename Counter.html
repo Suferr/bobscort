@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Auto Increment Counter</title>
+  <title>Custom Interval Counter</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -21,38 +21,46 @@
   </style>
 </head>
 <body>
-  <h1>Auto Increment Counter</h1>
+  <h1>Custom Interval Counter</h1>
   <div>
     <label for="endNumber">End Number: </label>
     <input type="number" id="endNumber" placeholder="Enter end number" value="10">
+    <label for="interval">Interval (ms): </label>
+    <input type="number" id="interval" placeholder="Enter interval in ms" value="1000">
     <button onclick="startCounter()">Start</button>
   </div>
   <div id="counter">0</div>
 
   <script>
     let counterValue = 0;
-    let interval;
+    let intervalId;
 
     function startCounter() {
       const endNumber = parseInt(document.getElementById('endNumber').value, 10);
+      const interval = parseInt(document.getElementById('interval').value, 10);
 
       if (isNaN(endNumber) || endNumber <= 0) {
-        alert("Please enter a valid positive number.");
+        alert("Please enter a valid positive end number.");
         return;
       }
 
-      clearInterval(interval); // Clear any existing counter
+      if (isNaN(interval) || interval <= 0) {
+        alert("Please enter a valid positive interval in milliseconds.");
+        return;
+      }
+
+      clearInterval(intervalId); // Clear any existing counter
       counterValue = 0;
       document.getElementById('counter').textContent = counterValue;
 
-      interval = setInterval(() => {
+      intervalId = setInterval(() => {
         if (counterValue < endNumber) {
           counterValue++;
           document.getElementById('counter').textContent = counterValue;
         } else {
-          clearInterval(interval); // Stop the counter when reaching the end number
+          clearInterval(intervalId); // Stop the counter when reaching the end number
         }
-      }, 1000); // Update every second
+      }, interval); // Use the custom interval
     }
   </script>
 </body>
