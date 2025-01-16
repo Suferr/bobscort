@@ -61,13 +61,17 @@
       // RAM info
       const ram = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown';
 
+      // CPU info (Number of logical processors)
+      const cpuCores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Cores` : 'Unknown';
+
       // Populate the table
       const specs = [
         { name: 'Operating System', value: os },
         { name: 'User Agent', value: userAgent },
         { name: 'Language', value: language },
         { name: 'GPU', value: gpu },
-        { name: 'RAM', value: ram }
+        { name: 'RAM', value: ram },
+        { name: 'CPU Cores', value: cpuCores }
       ];
 
       specs.forEach(spec => {
