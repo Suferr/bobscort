@@ -23,11 +23,31 @@
     th {
       background-color: #f4f4f4;
     }
+    select {
+      margin: 10px;
+    }
   </style>
 </head>
 <body>
   <h1>System Specs Checker</h1>
   <button onclick="getSpecs()">Check My System</button>
+  
+  <!-- GPU & Processor Manual Selection -->
+  <div id="manualSelection" style="display:none;">
+    <h3>Is the system information incorrect? Choose your Processor and GPU:</h3>
+    <label for="processorSelect">Choose Processor (AMD/Intel):</label>
+    <select id="processorSelect">
+      <option value="Intel">Intel</option>
+      <option value="AMD">AMD</option>
+    </select>
+    <br>
+    <label for="gpuSelect">Choose GPU (Nvidia/AMD):</label>
+    <select id="gpuSelect">
+      <option value="Nvidia">Nvidia</option>
+      <option value="AMD">AMD</option>
+    </select>
+  </div>
+  
   <table id="specsTable">
     <thead>
       <tr>
@@ -37,16 +57,20 @@
     </thead>
     <tbody></tbody>
   </table>
+  
   <h2 id="score">Score: Calculating...</h2>
   <h3 id="advice"></h3>
+  
   <script>
     async function getSpecs() {
       const tableBody = document.querySelector('#specsTable tbody');
       const scoreElement = document.getElementById('score');
       const adviceElement = document.getElementById('advice');
+      const manualSelection = document.getElementById('manualSelection');
       tableBody.innerHTML = '';
       scoreElement.textContent = "Score: Calculating...";
       adviceElement.textContent = "";
+      manualSelection.style.display = 'none';
 
       // Basic system info
       const os = navigator.platform;
@@ -66,6 +90,11 @@
         gpuScore = gpu.toLowerCase().includes('intel') ? 20 : gpu.toLowerCase().includes('nvidia') || gpu.toLowerCase().includes('amd') ? 40 : 10;
       } catch (e) {
         console.error('Error detecting GPU:', e);
+      }
+
+      // If GPU is unknown, show manual selection
+      if (gpu === 'Unknown GPU' || gpu === 'Unavailable') {
+        manualSelection.style.display = 'block';
       }
 
       // RAM info
@@ -135,6 +164,18 @@
         if (storageScore < 15) advice.push("Consider upgrading to a larger or faster storage drive.");
         adviceElement.textContent = advice.length ? advice.join(" ") : "Minor improvements can be made.";
       }
+    }
+
+    // Use the user's manual selection for Processor and GPU
+    document.getElementById('processorSelect').addEventListener('change', updateSpecs);
+    document.getElementById('gpuSelect').addEventListener('change', updateSpecs);
+
+    function updateSpecs() {
+      const selectedProcessor = document.getElementById('processorSelect').value;
+      const selectedGPU = document.getElementById('gpuSelect').value;
+
+      // Override GPU and Processor values
+      document.getElementById('advice').textContent = `You have selected: Processor - ${selectedProcessor}, GPU - ${selectedGPU}`;
     }
   </script>
 </body>
