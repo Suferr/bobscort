@@ -64,6 +64,19 @@
       // CPU info (Number of logical processors)
       const cpuCores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Cores` : 'Unknown';
 
+      // Storage info using navigator.storage API
+      let storageInfo = 'Unavailable';
+      if (navigator.storage && navigator.storage.estimate) {
+        try {
+          const estimate = await navigator.storage.estimate();
+          const total = (estimate.quota / (1024 ** 3)).toFixed(2); // GB
+          const used = (estimate.usage / (1024 ** 3)).toFixed(2);  // GB
+          storageInfo = `${used} GB used out of ${total} GB`;
+        } catch (e) {
+          console.error('Error fetching storage info:', e);
+        }
+      }
+
       // Populate the table
       const specs = [
         { name: 'Operating System', value: os },
@@ -71,7 +84,8 @@
         { name: 'Language', value: language },
         { name: 'GPU', value: gpu },
         { name: 'RAM', value: ram },
-        { name: 'CPU Cores', value: cpuCores }
+        { name: 'CPU Cores', value: cpuCores },
+        { name: 'Storage', value: storageInfo }
       ];
 
       specs.forEach(spec => {
