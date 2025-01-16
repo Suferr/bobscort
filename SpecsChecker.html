@@ -70,8 +70,7 @@
         try {
           const estimate = await navigator.storage.estimate();
           const total = (estimate.quota / (1024 ** 3)).toFixed(2); // GB
-          const used = (estimate.usage / (1024 ** 3)).toFixed(2);  // GB
-          storageInfo = `${used} GB used out of ${total} GB`;
+          storageInfo = `${total} GB`;
         } catch (e) {
           console.error('Error fetching storage info:', e);
         }
