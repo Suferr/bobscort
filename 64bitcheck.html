@@ -12,7 +12,6 @@
         }
         #result {
             font-size: 1.5em;
-            color: #333;
         }
     </style>
 </head>
@@ -24,16 +23,36 @@
 
     <script>
         function checkOS() {
-            // Check if the navigator.platform includes "64"
-            const is64Bit = navigator.platform.includes("64");
             const resultElement = document.getElementById("result");
 
-            if (is64Bit) {
-                resultElement.textContent = "Your operating system is 64-bit.";
-                resultElement.style.color = "green";
-            } else {
-                resultElement.textContent = "Your operating system is not 64-bit.";
-                resultElement.style.color = "red";
+            try {
+                // User-Agent string for detecting mobile devices
+                const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+                // Check for Android 64-bit
+                const isAndroid64Bit = userAgent.includes("Android") && (
+                    userAgent.includes("arm64") || userAgent.includes("aarch64") || userAgent.includes("x86_64")
+                );
+
+                // Check for iOS 64-bit (all iPhones/iPads with iOS 11+ are 64-bit)
+                const isIOS64Bit = /iP(hone|ad|od)/.test(userAgent) && parseInt(navigator.appVersion.match(/OS (\d+)_/)[1], 10) >= 11;
+
+                // General 64-bit check for desktop
+                const isDesktop64Bit = typeof navigator.userAgentData !== 'undefined'
+                    ? navigator.userAgentData.architecture === "64"
+                    : userAgent.includes("WOW64") || userAgent.includes("Win64") || navigator.platform.includes("64");
+
+                // Determine and display the result
+                if (isAndroid64Bit || isIOS64Bit || isDesktop64Bit) {
+                    resultElement.textContent = "Your operating system is 64-bit.";
+                    resultElement.style.color = "green";
+                } else {
+                    resultElement.textContent = "Your operating system is not 64-bit.";
+                    resultElement.style.color = "red";
+                }
+            } catch (error) {
+                resultElement.textContent = "Unable to determine your operating system's architecture.";
+                resultElement.style.color = "orange";
             }
         }
     </script>
