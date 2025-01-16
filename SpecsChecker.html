@@ -38,12 +38,15 @@
     <tbody></tbody>
   </table>
   <h2 id="score">Score: Calculating...</h2>
+  <h3 id="advice"></h3>
   <script>
     async function getSpecs() {
       const tableBody = document.querySelector('#specsTable tbody');
       const scoreElement = document.getElementById('score');
+      const adviceElement = document.getElementById('advice');
       tableBody.innerHTML = '';
       scoreElement.textContent = "Score: Calculating...";
+      adviceElement.textContent = "";
 
       // Basic system info
       const os = navigator.platform;
@@ -116,6 +119,18 @@
 
       // Update score display
       scoreElement.textContent = `Score: ${totalScore}/100`;
+
+      // Generate advice based on score
+      if (totalScore >= 90) {
+        adviceElement.textContent = "Your system is excellent! No advice needed.";
+      } else {
+        let advice = [];
+        if (gpuScore < 20) advice.push("Consider upgrading your GPU for better performance.");
+        if (ramScore < 20) advice.push("Adding more RAM could improve your system.");
+        if (cpuScore < 15) advice.push("Upgrading your processor may help with multitasking.");
+        if (storageScore < 15) advice.push("Consider upgrading to a larger or faster storage drive.");
+        adviceElement.textContent = advice.length ? advice.join(" ") : "Minor improvements can be made.";
+      }
     }
   </script>
 </body>
