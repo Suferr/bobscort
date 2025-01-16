@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customizable Counter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    #counter {
+      font-size: 48px;
+      margin: 20px;
+    }
+    input[type="text"], input[type="number"] {
+      margin: 10px;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Customizable Counter</h1>
+  <div>
+    <label for="fontInput">Font Family: </label>
+    <input type="text" id="fontInput" placeholder="e.g., 'Courier New', sans-serif">
+    <label for="startNumber">Start Number: </label>
+    <input type="number" id="startNumber" value="0">
+    <button onclick="applyCustomization()">Apply</button>
+  </div>
+  <div id="counter">0</div>
+  <button onclick="increment()">+</button>
+  <button onclick="decrement()">-</button>
+  <button onclick="reset()">Reset</button>
+
+  <script>
+    let counterValue = 0;
+
+    function applyCustomization() {
+      const fontInput = document.getElementById('fontInput').value;
+      const startNumber = parseInt(document.getElementById('startNumber').value, 10);
+
+      if (fontInput) {
+        document.getElementById('counter').style.fontFamily = fontInput;
+      }
+      if (!isNaN(startNumber)) {
+        counterValue = startNumber;
+        document.getElementById('counter').textContent = counterValue;
+      }
+    }
+
+    function increment() {
+      counterValue++;
+      document.getElementById('counter').textContent = counterValue;
+    }
+
+    function decrement() {
+      counterValue--;
+      document.getElementById('counter').textContent = counterValue;
+    }
+
+    function reset() {
+      counterValue = 0;
+      document.getElementById('counter').textContent = counterValue;
+    }
+  </script>
+</body>
+</html>
