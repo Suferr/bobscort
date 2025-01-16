@@ -73,8 +73,11 @@
       const ramScore = navigator.deviceMemory ? Math.min(navigator.deviceMemory * 10, 30) : 0;
 
       // CPU info (Number of logical processors)
-      const cpuCores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Cores` : 'Unknown';
+      const cpuCores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Threads` : 'Unknown';
       const cpuScore = navigator.hardwareConcurrency ? Math.min(navigator.hardwareConcurrency * 5, 20) : 0;
+
+      // GHz Note (Unavailable in Browsers)
+      const cpuGHz = "Unavailable in browsers";
 
       // Storage info using navigator.storage API
       let storageInfo = 'Unavailable';
@@ -102,7 +105,8 @@
         { name: 'Language', value: language },
         { name: 'GPU', value: gpu },
         { name: 'RAM', value: ram },
-        { name: 'CPU Cores', value: cpuCores },
+        { name: 'Threads', value: cpuCores },
+        { name: 'Processor Speed', value: cpuGHz },
         { name: 'Storage', value: storageInfo }
       ];
 
