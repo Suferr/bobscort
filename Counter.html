@@ -25,13 +25,12 @@
   <div>
     <label for="fontInput">Font Family: </label>
     <input type="text" id="fontInput" placeholder="e.g., 'Courier New', sans-serif">
-    <label for="startNumber">Start Number: </label>
-    <input type="number" id="startNumber" value="0">
+    <label for="addNumber">Add Number: </label>
+    <input type="number" id="addNumber" value="1">
     <button onclick="applyCustomization()">Apply</button>
   </div>
   <div id="counter">0</div>
   <button onclick="increment()">+</button>
-  <button onclick="decrement()">-</button>
   <button onclick="reset()">Reset</button>
 
   <script>
@@ -39,25 +38,18 @@
 
     function applyCustomization() {
       const fontInput = document.getElementById('fontInput').value;
-      const startNumber = parseInt(document.getElementById('startNumber').value, 10);
 
       if (fontInput) {
         document.getElementById('counter').style.fontFamily = fontInput;
       }
-      if (!isNaN(startNumber)) {
-        counterValue = startNumber;
-        document.getElementById('counter').textContent = counterValue;
-      }
     }
 
     function increment() {
-      counterValue++;
-      document.getElementById('counter').textContent = counterValue;
-    }
-
-    function decrement() {
-      counterValue--;
-      document.getElementById('counter').textContent = counterValue;
+      const addNumber = parseInt(document.getElementById('addNumber').value, 10);
+      if (!isNaN(addNumber)) {
+        counterValue += addNumber;
+        document.getElementById('counter').textContent = counterValue;
+      }
     }
 
     function reset() {
