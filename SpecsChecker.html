@@ -47,7 +47,7 @@
       const userAgent = navigator.userAgent;
       const language = navigator.language;
 
-      // Attempting GPU info using WebGL
+      // GPU info using WebGL
       let gpu = 'Unavailable';
       try {
         const canvas = document.createElement('canvas');
@@ -58,13 +58,16 @@
         console.error('Error detecting GPU:', e);
       }
 
+      // RAM info
+      const ram = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown';
+
       // Populate the table
       const specs = [
         { name: 'Operating System', value: os },
         { name: 'User Agent', value: userAgent },
         { name: 'Language', value: language },
         { name: 'GPU', value: gpu },
-        { name: 'Memory (Approx)', value: `${navigator.deviceMemory || 'Unknown'} GB` }
+        { name: 'RAM', value: ram }
       ];
 
       specs.forEach(spec => {
