@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Custom Interval Counter</title>
+  <title>Advanced Interval Counter</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -21,12 +21,14 @@
   </style>
 </head>
 <body>
-  <h1>Custom Interval Counter</h1>
+  <h1>Advanced Interval Counter</h1>
   <div>
     <label for="endNumber">End Number: </label>
     <input type="number" id="endNumber" placeholder="Enter end number" value="10">
-    <label for="interval">Interval (ms): </label>
-    <input type="number" id="interval" placeholder="Enter interval in ms" value="1000">
+    <label for="initialInterval">Initial Interval (ms): </label>
+    <input type="number" id="initialInterval" placeholder="Enter initial interval in ms" value="500">
+    <label for="intervalGrowth">Interval Growth (ms): </label>
+    <input type="number" id="intervalGrowth" placeholder="Enter interval growth in ms" value="50">
     <button onclick="startCounter()">Start</button>
   </div>
   <div id="counter">0</div>
@@ -37,30 +39,45 @@
 
     function startCounter() {
       const endNumber = parseInt(document.getElementById('endNumber').value, 10);
-      const interval = parseInt(document.getElementById('interval').value, 10);
+      let currentInterval = parseInt(document.getElementById('initialInterval').value, 10);
+      const intervalGrowth = parseInt(document.getElementById('intervalGrowth').value, 10);
 
+      // Validate input
       if (isNaN(endNumber) || endNumber <= 0) {
         alert("Please enter a valid positive end number.");
         return;
       }
-
-      if (isNaN(interval) || interval <= 0) {
-        alert("Please enter a valid positive interval in milliseconds.");
+      if (isNaN(currentInterval) || currentInterval <= 0) {
+        alert("Please enter a valid positive initial interval.");
+        return;
+      }
+      if (isNaN(intervalGrowth) || intervalGrowth < 0) {
+        alert("Please enter a valid non-negative interval growth.");
         return;
       }
 
-      clearInterval(intervalId); // Clear any existing counter
+      // Reset counter and clear previous intervals
+      clearInterval(intervalId);
       counterValue = 0;
       document.getElementById('counter').textContent = counterValue;
 
-      intervalId = setInterval(() => {
+      // Increment logic with dynamic interval growth
+      function incrementCounter() {
         if (counterValue < endNumber) {
           counterValue++;
           document.getElementById('counter').textContent = counterValue;
+
+          // Clear current interval and set a new one with updated interval
+          clearInterval(intervalId);
+          currentInterval += intervalGrowth;
+          intervalId = setInterval(incrementCounter, currentInterval);
         } else {
-          clearInterval(intervalId); // Stop the counter when reaching the end number
+          clearInterval(intervalId); // Stop when counter reaches the end number
         }
-      }, interval); // Use the custom interval
+      }
+
+      // Start the first interval
+      intervalId = setInterval(incrementCounter, currentInterval);
     }
   </script>
 </body>
