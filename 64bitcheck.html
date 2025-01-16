@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>64-Bit OS Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #result {
+            font-size: 1.5em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>64-Bit OS Checker</h1>
+    <p>Click the button below to check if your operating system is 64-bit:</p>
+    <button onclick="checkOS()">Check Now</button>
+    <p id="result"></p>
+
+    <script>
+        function checkOS() {
+            // Check if the navigator.platform includes "64"
+            const is64Bit = navigator.platform.includes("64");
+            const resultElement = document.getElementById("result");
+
+            if (is64Bit) {
+                resultElement.textContent = "Your operating system is 64-bit.";
+                resultElement.style.color = "green";
+            } else {
+                resultElement.textContent = "Your operating system is not 64-bit.";
+                resultElement.style.color = "red";
+            }
+        }
+    </script>
+</body>
+</html>
