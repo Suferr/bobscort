@@ -37,10 +37,13 @@
     </thead>
     <tbody></tbody>
   </table>
+  <h2 id="score">Score: Calculating...</h2>
   <script>
     async function getSpecs() {
       const tableBody = document.querySelector('#specsTable tbody');
+      const scoreElement = document.getElementById('score');
       tableBody.innerHTML = '';
+      scoreElement.textContent = "Score: Calculating...";
 
       // Basic system info
       const os = navigator.platform;
@@ -49,32 +52,45 @@
 
       // GPU info using WebGL
       let gpu = 'Unavailable';
+      let gpuScore = 0; // GPU score contribution
       try {
         const canvas = document.createElement('canvas');
         const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
         const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
         gpu = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'Unknown GPU';
+
+        // Simple scoring logic for GPU
+        gpuScore = gpu.toLowerCase().includes('intel') ? 20 : gpu.toLowerCase().includes('nvidia') || gpu.toLowerCase().includes('amd') ? 40 : 10;
       } catch (e) {
         console.error('Error detecting GPU:', e);
       }
 
       // RAM info
       const ram = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown';
+      const ramScore = navigator.deviceMemory ? Math.min(navigator.deviceMemory * 10, 30) : 0;
 
       // CPU info (Number of logical processors)
       const cpuCores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Cores` : 'Unknown';
+      const cpuScore = navigator.hardwareConcurrency ? Math.min(navigator.hardwareConcurrency * 5, 20) : 0;
 
       // Storage info using navigator.storage API
       let storageInfo = 'Unavailable';
+      let storageScore = 0;
       if (navigator.storage && navigator.storage.estimate) {
         try {
           const estimate = await navigator.storage.estimate();
           const total = (estimate.quota / (1024 ** 3)).toFixed(2); // GB
           storageInfo = `${total} GB`;
+
+          // Simple scoring logic for storage
+          storageScore = total >= 500 ? 20 : total >= 250 ? 15 : total >= 100 ? 10 : 5;
         } catch (e) {
           console.error('Error fetching storage info:', e);
         }
       }
+
+      // Calculate total score
+      const totalScore = gpuScore + ramScore + cpuScore + storageScore;
 
       // Populate the table
       const specs = [
@@ -97,6 +113,131 @@
         row.appendChild(valueCell);
         tableBody.appendChild(row);
       });
+
+      // Update score display
+      scoreElement.textContent = `Score: ${totalScore}/100`;
+    }
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Specs Checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+      width: 80%;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+  </style>
+</head>
+<body>
+  <h1>System Specs Checker</h1>
+  <button onclick="getSpecs()">Check My System</button>
+  <table id="specsTable">
+    <thead>
+      <tr>
+        <th>Spec</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <h2 id="score">Score: Calculating...</h2>
+  <script>
+    async function getSpecs() {
+      const tableBody = document.querySelector('#specsTable tbody');
+      const scoreElement = document.getElementById('score');
+      tableBody.innerHTML = '';
+      scoreElement.textContent = "Score: Calculating...";
+
+      // Basic system info
+      const os = navigator.platform;
+      const userAgent = navigator.userAgent;
+      const language = navigator.language;
+
+      // GPU info using WebGL
+      let gpu = 'Unavailable';
+      let gpuScore = 0; // GPU score contribution
+      try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+        gpu = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'Unknown GPU';
+
+        // Simple scoring logic for GPU
+        gpuScore = gpu.toLowerCase().includes('intel') ? 20 : gpu.toLowerCase().includes('nvidia') || gpu.toLowerCase().includes('amd') ? 40 : 10;
+      } catch (e) {
+        console.error('Error detecting GPU:', e);
+      }
+
+      // RAM info
+      const ram = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown';
+      const ramScore = navigator.deviceMemory ? Math.min(navigator.deviceMemory * 10, 30) : 0;
+
+      // CPU info (Number of logical processors)
+      const cpuCores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Cores` : 'Unknown';
+      const cpuScore = navigator.hardwareConcurrency ? Math.min(navigator.hardwareConcurrency * 5, 20) : 0;
+
+      // Storage info using navigator.storage API
+      let storageInfo = 'Unavailable';
+      let storageScore = 0;
+      if (navigator.storage && navigator.storage.estimate) {
+        try {
+          const estimate = await navigator.storage.estimate();
+          const total = (estimate.quota / (1024 ** 3)).toFixed(2); // GB
+          storageInfo = `${total} GB`;
+
+          // Simple scoring logic for storage
+          storageScore = total >= 500 ? 20 : total >= 250 ? 15 : total >= 100 ? 10 : 5;
+        } catch (e) {
+          console.error('Error fetching storage info:', e);
+        }
+      }
+
+      // Calculate total score
+      const totalScore = gpuScore + ramScore + cpuScore + storageScore;
+
+      // Populate the table
+      const specs = [
+        { name: 'Operating System', value: os },
+        { name: 'User Agent', value: userAgent },
+        { name: 'Language', value: language },
+        { name: 'GPU', value: gpu },
+        { name: 'RAM', value: ram },
+        { name: 'CPU Cores', value: cpuCores },
+        { name: 'Storage', value: storageInfo }
+      ];
+
+      specs.forEach(spec => {
+        const row = document.createElement('tr');
+        const nameCell = document.createElement('td');
+        const valueCell = document.createElement('td');
+        nameCell.textContent = spec.name;
+        valueCell.textContent = spec.value;
+        row.appendChild(nameCell);
+        row.appendChild(valueCell);
+        tableBody.appendChild(row);
+      });
+
+      // Update score display
+      scoreElement.textContent = `Score: ${totalScore}/100`;
     }
   </script>
 </body>
