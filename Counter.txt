@@ -1,84 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Advanced Interval Counter</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 50px;
-    }
-    #counter {
-      font-size: 48px;
-      margin: 20px;
-    }
-    input[type="number"] {
-      margin: 10px;
-      padding: 5px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Interval Counter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        .counter {
+            font-size: 3rem;
+            color: #333;
+        }
+        .input-container {
+            margin-top: 20px;
+        }
+        input[type="number"] {
+            padding: 5px;
+            font-size: 1.2rem;
+            margin-right: 10px;
+            width: 150px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Advanced Interval Counter</h1>
-  <div>
-    <label for="endNumber">End Number: </label>
-    <input type="number" id="endNumber" placeholder="Enter end number" value="10">
-    <label for="initialInterval">Initial Interval (ms): </label>
-    <input type="number" id="initialInterval" placeholder="Enter initial interval in ms" value="500">
-    <label for="intervalGrowth">Interval Growth (ms): </label>
-    <input type="number" id="intervalGrowth" placeholder="Enter interval growth in ms" value="50">
-    <button onclick="startCounter()">Start</button>
-  </div>
-  <div id="counter">0</div>
+    <div>
+        <div class="counter" id="counter">0</div>
+        <div class="input-container">
+            <label for="interval">Set Interval (in milliseconds): </label>
+            <input type="number" id="interval" value="100" min="1" max="10000" />
+            <button id="startBtn">Start Counter</button>
+        </div>
+    </div>
 
-  <script>
-    let counterValue = 0;
-    let intervalId;
+    <script>
+        let counter = 0;
+        let intervalID;
+        const counterElement = document.getElementById('counter');
+        const intervalInput = document.getElementById('interval');
+        const startButton = document.getElementById('startBtn');
 
-    function startCounter() {
-      const endNumber = parseInt(document.getElementById('endNumber').value, 10);
-      let currentInterval = parseInt(document.getElementById('initialInterval').value, 10);
-      const intervalGrowth = parseInt(document.getElementById('intervalGrowth').value, 10);
-
-      // Validate input
-      if (isNaN(endNumber) || endNumber <= 0) {
-        alert("Please enter a valid positive end number.");
-        return;
-      }
-      if (isNaN(currentInterval) || currentInterval <= 0) {
-        alert("Please enter a valid positive initial interval.");
-        return;
-      }
-      if (isNaN(intervalGrowth) || intervalGrowth < 0) {
-        alert("Please enter a valid non-negative interval growth.");
-        return;
-      }
-
-      // Reset counter and clear previous intervals
-      clearInterval(intervalId);
-      counterValue = 0;
-      document.getElementById('counter').textContent = counterValue;
-
-      // Increment logic with dynamic interval growth
-      function incrementCounter() {
-        if (counterValue < endNumber) {
-          counterValue++;
-          document.getElementById('counter').textContent = counterValue;
-
-          // Clear current interval and set a new one with updated interval
-          clearInterval(intervalId);
-          currentInterval += intervalGrowth;
-          intervalId = setInterval(incrementCounter, currentInterval);
-        } else {
-          clearInterval(intervalId); // Stop when counter reaches the end number
+        // Function to update the counter value
+        function updateCounter() {
+            counter++;
+            counterElement.textContent = counter;
         }
-      }
 
-      // Start the first interval
-      intervalId = setInterval(incrementCounter, currentInterval);
-    }
-  </script>
+        // Start button event listener
+        startButton.addEventListener('click', function() {
+            // Clear any previous interval
+            if (intervalID) {
+                clearInterval(intervalID);
+            }
+
+            // Get the interval value from input (parse to an integer)
+            let intervalTime = parseInt(intervalInput.value, 10);
+
+            // Ensure interval is within a valid range (at least 1ms)
+            if (intervalTime < 1) {
+                intervalTime = 1;  // Ensure the minimum interval is 1ms
+            }
+
+            // Start a new interval with the selected time
+            intervalID = setInterval(updateCounter, intervalTime);
+        });
+    </script>
 </body>
 </html>
